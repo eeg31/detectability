@@ -1,0 +1,1099 @@
+---
+title: "Estimate detectability of haemorrhagic fevers across sub-Saharan Africa"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+set.seed(20200330)
+```
+
+
+# Setup {.tabset .tabset-fade .tabset-pills}
+
+## Load packages and helper scripts
+
+```{r dependencies}
+require(raster)
+require(purrr)
+require(cowplot)
+require(countrycode)
+require(maptools)
+require(spData)
+require(sf)
+require(dplyr)
+require(leaflet)
+require(mapview)
+require(rworldmap)
+require(sp)
+require(rgeos)
+require(reshape2)
+require(ggplot2)
+require(ggdendro)
+require(rnaturalearth)
+require(rnaturalearthdata)
+
+
+require(clusterLikelihood)
+
+source(file.path('scripts','coords2country.R'))
+source(file.path('scripts','bivariate.R'))
+
+matching <- rio::import(file.path('data','code_matches.xlsx')) %>%
+  mutate(GBDcode = as.numeric(GBDcode),
+         scalar = as.numeric(scalar))
+
+symptoms <- rio::import(file.path('data','symptoms_Mar2020.xlsx'))
+default_var <- rio::import(file.path('data','var_Mar2020.csv'))
+
+default_mode <- symptoms[,2:ncol(symptoms)]
+rownames(default_mode) <- symptoms$syndrome
+save(default_mode, file='clusterLikelihood/data/symptoms.rda', version=2)
+
+default_var <- default_var[,2:ncol(symptoms)]
+rownames(default_var) <- symptoms$syndrome
+save(default_var, file='clusterLikelihood/data/var.rda', version=2)
+
+```
+
+## Set control parameters
+
+```{r control_params}
+minval <- 1e-12
+from.scratch <- FALSE
+calculate.probs <- TRUE
+do.spatial <- TRUE
+max.cluster <- 50
+nsample <- 10
+geotol <- 1e-4
+
+context <- get_context(location='SSA', w=0)
+
+secondary_colors <- c('Ebola virus disease','Marburg virus disease',
+                      'yellow fever', 'Lassa virus disease',
+                      'Rift Valley fever',
+                      'dengue haemorrhagic fever', 'dengue')
+colors <- data.frame(syndrome=context$syndrome_names[!(context$syndrome_names %in% secondary_colors)],
+                      color=viridis(n=length(context$syndrome_names) -
+                                      length(secondary_colors)))
+v.col <- as.character(colors$color)
+names(v.col) <- colors$syndrome
+v.col[secondary_colors] <- as.character(viridis(n=length(secondary_colors), option='A', begin=.8, end=.3))
+```
+## Visualize syndromic profiles
+
+```{r profile_viz}
+plots <- plot_syndromes(context$syndromes, priors=context$priors)
+
+pdf(file.path('figures','profiles.pdf'), height=20, width=10)
+cowplot::plot_grid(plotlist=plots, ncol=3)
+dev.off()
+```
+
+
+## Load GBD data
+
+```{r GBDsetup}
+GBD <- read.csv(file.path('data','IHME-GBD_2017_DATA-1944a5bd-1.csv'), stringsAsFactors = FALSE) %>%
+       filter(cause_id %in% matching$GBDcode & metric_name=='Rate' & measure_name=='Incidence') %>%
+       mutate(ISO=purrr::map_chr(location_name, 
+                                 function(x) {
+                                   countrycode(x, origin='country.name', destination = 'iso2c') 
+                                   })) %>%
+       bind_rows(read.csv(file.path('data','IHME-GBD_2017_DATA-17fa3623-1.csv'), stringsAsFactors = FALSE) %>%
+                 filter(cause_id %in% matching$GBDcode & metric_name=='Rate' & measure_name=='Incidence') %>%
+                 mutate(ISO='SSA')
+                 )
+
+countries <- unique(GBD$ISO)
+
+inc_data <- as_tibble(expand.grid(syndrome=unique(matching$syndrome), 
+                                  ISO=as.character(unique(GBD$ISO)))) %>%
+  mutate(row=1:nrow(.),
+         incidence=purrr::map_dbl(row, function(x){
+                                  iso_x <- ISO[x]
+                                  syn_x <- syndrome[x]
+                                  matches <- filter(matching, matching$syndrome==syn_x)
+                                  if(nrow(matches) > 0) {
+                                    if(matches$source=='GBD'){
+                                      df <- filter(GBD, GBD$cause_id %in% matches$GBDcode & GBD$ISO==iso_x)
+                                      return(sum(df$val*matches$scalar))
+                                    }
+                                    if(matches$source=='spill'){
+                                      #assuming regional population of 1 B
+                                      return(sum(as.numeric(matches$annual_outbreaks))/1000000)
+                                    }
+                                  }
+                                  return(NA)
+  }),
+  incidence=incidence/1000) %>% 
+  dplyr::select(-'row')
+ # default_incidence <- inc_data
+#  save(default_incidence, file='clusterLikelihood/data/incidence.rda', version=2)
+
+SSA <- filter(inc_data, ISO=='SSA')
+```
+
+## Load malaria data
+
+Load data on other endemic diseases (if `from_scratch` is set to `TRUE`):
+
+```{r setup_context}
+if(from.scratch){
+  
+  # load and normalise Ebola spillover niche map
+  spill.map <- raster(file.path('data','averageEVDrisk.tif'), values=TRUE)
+  spill.map.df <- as.data.frame(spill.map, xy = TRUE)
+  spill.map.df$EVDrisk <- findInterval(spill.map.df$averageEVDrisk,vec=seq(0,0.07,0.001))
+  spill.map.df$EVDrisk <- seq(0,0.07,0.001)[spill.map.df$EVDrisk+1]+0.0001
+  spill.map.df$EVDrisknorm <- spill.map.df$EVDrisk/sum(spill.map.df$EVDrisk, na.rm=TRUE)
+  spill.map.df$EVDrisknorm[which(is.na(spill.map.df$EVDrisknorm))] <- 0
+  
+  # add countries
+  spill.map.df$ISO <- coords2country(spill.map.df) %>% as.character
+  
+  # load and sum malaria data
+  Pv_malaria <- file.path('Pv_Incidence','RasterData','Pv_incidence_rate_median',
+                          'incidence_rate_median_Global_admin0_2017.tif') %>%
+                                       raster(values=TRUE) %>%
+                                       as.data.frame(xy=TRUE) %>%
+                                       filter(x >= min(spill.map.df$x) - geotol &
+                                              x <= max(spill.map.df$x) + geotol &
+                                              y >= min(spill.map.df$y) - geotol &
+                                              y <= max(spill.map.df$y) + geotol)
+  Pf_malaria <- file.path('Pf_Incidence','RasterData','Pf_incidence_rate_median',
+                          'incidence_rate_median_Global_admin0_2017.tif') %>%
+                                       raster(values=TRUE) %>%
+                                       as.data.frame(xy=TRUE) %>%
+                                       filter(x >= min(spill.map.df$x) - geotol &
+                                              x <= max(spill.map.df$x) + geotol &
+                                              y >= min(spill.map.df$y) - geotol &
+                                              y <= max(spill.map.df$y) + geotol) 
+  Pv_malaria$ISO <- coords2country(Pv_malaria)
+  Pf_malaria$ISO <- coords2country(Pf_malaria)
+  malaria <- filter(Pf_malaria, ISO %in% spill.map.df$ISO)
+  colnames(malaria) <- c('x','y','incidence','ISO')
+  
+  Pv_malaria <- filter(Pv_malaria, ISO %in% spill.map.df$ISO)
+  malaria$incidence <- malaria$incidence + Pv_malaria$incidence_rate_median_Global_admin0_2017
+  save(malaria, file=file.path('data','malaria.Rda'))
+  rm(Pf_malaria)
+  rm(Pv_malaria)
+  
+  #add summed malaria presence to each pixel
+  spill.map.df <- mutate(spill.map.df,
+                         row=1:nrow(spill.map.df),
+                         ISO2 = map_chr(ISO, 
+                                        function(i) countrycode(i, origin='iso3c',destination = 'iso2c')),
+                         Malaria = purrr::map_dbl(row, function(i){
+                             mal <- malaria$incidence[which(malaria$x<=spill.map.df$x[i]+geotol &
+                                                            malaria$y<=spill.map.df$y[i]+geotol & 
+                                                            malaria$x>=spill.map.df$x[i]-geotol &
+                                                            malaria$y>=spill.map.df$y[i]-geotol)]
+                             if(length(mal) != 1) {
+                               print(paste('row ',i, 'unmatched: ',mal, sep=''))
+                               return(NA)
+                             }
+                             return(mal)
+                         }),
+                         MalariaScalar = purrr::map_dbl(ISO2, function(i){
+                            malariaSums <- filter(spill.map.df, ISO2==i)
+                            countryMean <- mean(malariaSums$Malaria, na.rm=TRUE)
+                            countryGBD <- sum(filter(inc_data, ISO==i & syndrome=='all malaria')$incidence)
+                            out <- countryGBD/countryMean
+                            
+                            return(max(out, minval, na.rm=TRUE))
+                         }),
+                         Malaria = Malaria*MalariaScalar,
+                         CMalaria = Malaria*filter(matching, syndrome=='complicated malaria')$scalar)
+  rm(malaria)
+  save(spill.map.df, file=file.path('data','blank-spillmap-TEMP.Rda'))
+  
+}
+```
+
+## Load dengue data
+
+```{r load_dengue}
+if(from.scratch)  {
+  #add raw dengue presence to each pixel
+  dengue <- file.path('data','dengueBhatt.tif') %>% 
+    raster(values=TRUE) %>% 
+    as.data.frame(xy=TRUE) %>%
+    filter(x >= min(spill.map.df$x) - geotol &
+           x <= max(spill.map.df$x) + geotol &
+           y >= min(spill.map.df$y) - geotol &
+           y <= max(spill.map.df$y) + geotol) 
+
+  spill.map.df <- mutate(spill.map.df, 
+                         DengueClimate = purrr::map_dbl(row, function(i){
+                              den <- dengue$dengueBhatt[which(dengue$x <=spill.map.df$x[i] + geotol &
+                                                              dengue$y <=spill.map.df$y[i] + geotol & 
+                                                              dengue$x >=spill.map.df$x[i] - geotol & 
+                                                              dengue$y >=spill.map.df$y[i] - geotol)]
+                              if(length(den) != 1) {
+                                print(paste('row ',i, 'unmatched: ',den, sep=''))
+                                return(NA)
+                              } else {
+                                return(den)
+                              }
+                            }))
+  rm(dengue)
+  save(spill.map.df, file=file.path('data','blank-spillmap-TEMP.Rda'))
+  
+  #convert dengue suitability to incidence using country incidence means
+  spill.map.df <- mutate(spill.map.df,
+                         DengueScalar = purrr::map_dbl(ISO2, function(i){
+                            dengueSums <- filter(spill.map.df, ISO2==i)
+                            countryMean <- mean(dengueSums$DengueClimate, na.rm=TRUE)
+                            countryGBD <- sum(filter(inc_data, ISO==i & grepl('dengue', syndrome))$incidence)
+                            out <- countryGBD/countryMean
+                            
+                            return(max(out, minval, na.rm=TRUE))
+                         }),
+                         Dengue = DengueClimate*DengueScalar,
+                         DengueHF = Dengue*filter(matching, syndrome=='dengue haemorrhagic fever')$scalar,
+                         Dengue = Dengue*filter(matching, syndrome=='dengue')$scalar)
+  save(spill.map.df, file=file.path('data','blank-spillmap-TEMP.Rda'))
+}
+```
+
+## Load diarrhea data
+
+```{r load_diarrhea}
+if(from.scratch){
+  # load diarrheal disease data and add raw data to each pixel
+  diarrhea <- file.path('data','diarrhea_mean',
+                        'IHME_AFRICA_DIARRHEA_2000_2015_INC_RT_MEAN_2015_Y2018M09D18.TIF') %>% 
+              raster(values=TRUE) %>% 
+              as.data.frame(xy=TRUE) %>%
+              mutate(inc = IHME_AFRICA_DIARRHEA_2000_2015_INC_RT_MEAN_2015_Y2018M09D18) %>%
+    filter(x >= min(spill.map.df$x) - geotol &
+           x <= max(spill.map.df$x) + geotol &
+           y >= min(spill.map.df$y) - geotol &
+           y <= max(spill.map.df$y) + geotol) %>% as_tibble
+  
+  spill.map.df <- mutate(spill.map.df,
+                         row=1:nrow(spill.map.df),
+                         Diarrhea=purrr::map_dbl(row, function(i){
+                            dia <- diarrhea$inc[which(diarrhea$x <= spill.map.df$x[i] + geotol &
+                                                      diarrhea$y <= spill.map.df$y[i] + geotol & 
+                                                      diarrhea$x >= spill.map.df$x[i] - geotol & 
+                                                      diarrhea$y >= spill.map.df$y[i] - geotol)]
+                            if(length(dia) != 1) {
+                              print(paste('row ',i, 'unmatched: ', dia, sep=''))
+                              return(NA)
+                            } else {
+                              return(dia)
+                            }
+                         }),
+                         DiarrheaScalar = purrr::map_dbl(ISO2, function(i){
+                            diaSums <- filter(spill.map.df, ISO2==i)
+                            countryMean <- mean(diaSums$Diarrhea, na.rm=TRUE)
+                            countryGBD <- sum(filter(inc_data, ISO==i & 
+                                                       syndrome=='diarrheal diseases')$incidence)
+                            out <- countryGBD/countryMean
+                            
+                            return(max(out, minval, na.rm=TRUE))
+                         }),
+                         Diarrhea = Diarrhea*DiarrheaScalar,
+                         Typhoid = purrr::map_dbl(ISO2, 
+                                                  function(i) {
+                                                    out <- filter(inc_data, ISO==i & syndrome=='typhoid fever')$incidence
+                                                    if(length(out) != 1) return(NA)
+                                                    return(out)
+                                                    }),
+                         TyphoidScalar = purrr::map_dbl(ISO2, function(i){
+                            diaSums <- filter(spill.map.df, ISO2==i)
+                            countryMean <- mean(diaSums$Diarrhea, na.rm=TRUE)
+                            countryGBD <- sum(filter(inc_data, ISO==i & 
+                                                     syndrome=='typhoid fever')$incidence)
+                            out <- countryGBD/countryMean
+                            
+                            return(max(out, minval, na.rm=TRUE))
+                         }),
+                         Typhoid = Diarrhea*TyphoidScalar,
+                         INTS = purrr::map_dbl(ISO2, 
+                                               function(i) {
+                                                 out <- filter(inc_data, ISO==i & syndrome=='invasive non-typhoidal Salmonella (iNTS)')$incidence
+                                                 if(length(out) != 1) return(NA)
+                                                 return(out)
+                                                 }),
+                         INTSScalar = purrr::map_dbl(ISO2, function(i){
+                            diaSums <- filter(spill.map.df, ISO2==i)
+                            countryMean <- mean(diaSums$Diarrhea, na.rm=TRUE)
+                            countryGBD <- sum(filter(inc_data, ISO==i & 
+                                                     syndrome=='invasive non-typhoidal Salmonella (iNTS)')$incidence)
+                            out <- countryGBD/countryMean
+                            
+                            return(max(out, minval, na.rm=TRUE))
+                         }),
+                         INTS = Diarrhea*INTSScalar)
+  rm(diarrhea)
+  save(spill.map.df, file=file.path('data','blank-spillmap-TEMP.Rda'))
+}
+```
+
+## Load CCHF data
+
+```{r load_cchf}
+if(from.scratch){
+  geotol <- 4.168e-2
+
+  cchf <- file.path('data','cchf-emma.asc') %>%
+        raster(values=TRUE) %>% 
+        as.data.frame(xy=TRUE) %>%
+        filter(x >= min(spill.map.df$x) - geotol &
+               x <= max(spill.map.df$x) + geotol &
+               y >= min(spill.map.df$y) - geotol &
+               y <= max(spill.map.df$y) + geotol) 
+  
+  spill.map.df <- mutate(spill.map.df, 
+                         CCHF = purrr::map_dbl(1:nrow(spill.map.df), function(i){
+                                cc <- cchf$cchf.emma[which(cchf$x <= spill.map.df$x[i] + geotol &
+                                                            cchf$y <= spill.map.df$y[i] + geotol & 
+                                                            cchf$x >= spill.map.df$x[i] - geotol &
+                                                            cchf$y >= spill.map.df$y[i] - geotol)]
+                                if(length(cc) != 1) {
+                                  print(paste('row ',i, 'unmatched: ',cc, sep=''))
+                                  1
+                                } else {
+                                  cc
+                                }
+                              }))
+  
+  meanCCHF <- mean(spill.map.df$CCHF, na.rm=T)
+  spill.map.df <- mutate(spill.map.df,
+                         CCHF=CCHF/meanCCHF)
+  rm(cchf)
+  save(spill.map.df, file=file.path('data','blank-spillmap-TEMP.Rda'))
+}
+```
+
+## Load yellow fever data
+
+```{r load_yf}
+if(from.scratch) {
+  geotol <- 1e-2
+  #add raw dengue presence to each pixel
+  yf <- file.path('data','YF_IPCC','prediction.tif') %>%
+        raster(values=TRUE) %>% 
+        as.data.frame(xy=TRUE) %>%
+        filter(x >= min(spill.map.df$x) - geotol &
+               x <= max(spill.map.df$x) + geotol &
+               y >= min(spill.map.df$y) - geotol &
+               y <= max(spill.map.df$y) + geotol) 
+
+  spill.map.df <- mutate(spill.map.df, 
+                         YF = purrr::map_dbl(1:nrow(spill.map.df), function(i){
+                                yel <- yf$prediction[which(yf$x <= spill.map.df$x[i] + geotol &
+                                                           yf$y <= spill.map.df$y[i] + geotol & 
+                                                           yf$x >= spill.map.df$x[i] - geotol &
+                                                           yf$y >= spill.map.df$y[i] - geotol)]
+                                if(length(yel) != 1) {
+                                  print(paste('row ',i, 'unmatched: ',yel, sep=''))
+                                  NA
+                                } else {
+                                  yel
+                                }
+                              }),
+                         YFScalar = purrr::map_dbl(ISO2, function(i){
+                            YFSums <- filter(spill.map.df, ISO2==i)
+                            countryMean <- mean(YFSums$YF, na.rm=TRUE)
+                            countryGBD <- max(minval, 
+                                              sum(filter(inc_data, ISO==i & 
+                                                  syndrome=='yellow fever')$incidence))
+                            out <- countryGBD/countryMean
+                            
+                            return(max(out, minval, na.rm=TRUE))
+                         }),
+                         YF = YF*YFScalar,
+                         )
+  rm(yf)
+  save(spill.map.df, file=file.path('data','blank-spillmap-TEMP.Rda'))
+}
+```
+
+## Replicate (or load) dataframe
+
+```{r build_df}
+if(from.scratch){
+
+  spill.map.df$pixel <- 1:nrow(spill.map.df)
+  spill.map.df <- full_join(spill.map.df, expand.grid(pixel=unique(spill.map.df$pixel), 
+                                        cluster=1:max.cluster), by='pixel') %>%
+                  mutate(ebola.prob=NA)#,
+                        # prob97.5=NA,
+                        # prob2.5=NA,
+                        # prob75=NA,
+                        # prob25=NA)
+  
+  # save empty data frame
+  save(spill.map.df,file=file.path('data','blank-spillmap.Rda'), version=2)
+} else {
+  load(file.path('data','blank-spillmap.Rda')) 
+}
+spill.map.df <- spill.map.df %>%
+                  filter(!is.na(ISO2) & !is.na(Malaria))
+```
+
+
+# Algorithm tuning and sensitivity analysis
+
+```{r ssa_detection}
+if(calculate.probs){
+  
+  context <- get_context(location='SSA', spill_scalar = 100, w=0)
+  
+  #next: tSNE
+  grid_search <- tibble(w=seq(0, 1, length.out=6)) %>%
+                 mutate(theta=purrr::map(w, function(i){
+                   get_context(location='SSA', w=i)$syndromes[[1]]$theta
+                 })) %>%
+                 right_join(expand.grid(syndrome=context$syndrome_names, 
+                                       w=seq(0, 1, length.out=10), spill_lab=seq(0,26, length.out=14))) %>%
+                 mutate(ID=1:nrow(.),
+                        spill=exp(spill_lab),
+                        sim=purrr::map(ID, function(i) {
+                             print(paste(round(100*i/max(ID),3), '% done', sep=''))
+                             sim_outbreak(maxsize = 10, minsize=10, nsample=100,
+                                          spill_scalar=spill[i], w = w[i],
+                                          ref_name=syndrome[i], thetas=theta[[i]],
+                                          location='SSA')
+                            }))
+  grid_search <- mutate(grid_search,
+                        inc=purrr::map_dbl(syndrome, function(j){
+                          context$priors[j]
+                        }),
+                        TP=purrr::map2_dbl(sim, syndrome, function(i, j){
+                            filter(i, syndrome==j)$prob
+                        }),
+                        FN=purrr::map2_dbl(sim, syndrome, function(i, j){
+                            sum(filter(i, syndrome!=j)$prob)
+                        }))
+   grid_search <- mutate(grid_search,
+                         FP=purrr::map_dbl(ID, function(i){
+                             c <- w[i]
+                             s <- spill[i]
+                             j <- syndrome[i]
+                             g <- filter(grid_search, w==c & spill==s & syndrome!=j)
+                            
+                             sum(sapply(g$sim, function(x) filter(x, syndrome==j)$prob)*g$inc)
+                         }),
+                         TN=purrr::map_dbl(ID, function(i){
+                             c <- w[i]
+                             s <- spill[i]
+                             j <- syndrome[i]
+                             g <- filter(grid_search, w==c & spill==s & syndrome!=j)
+                        
+                             sum(sapply(g$sim, function(x) filter(x, syndrome!=j)$prob)*g$inc)
+                         }),
+                         TP=TP*inc,
+                         FN=FN*inc,
+                         sensitivity=TP/(TP+FN),
+                         specificity=TN/(TN+FP))
+   save(grid_search, file=file.path('data','sens-spec.rda'))
+} else {
+  load(file=file.path('data','sens-spec.rda'))
+}
+   
+  g1 <- ggplot(grid_search)+
+    geom_tile(aes(x=spill_lab, y=w, fill=sensitivity))+
+    scale_x_continuous("spillover scalar (e^x)")+
+    scale_y_continuous('colinearity weight')+
+    scale_fill_viridis_c('sensitivity', option='A', limits=c(0,1))+
+    facet_wrap(facets='syndrome', ncol=4) +
+    theme_classic()+theme(legend.position = 'top')
+
+  g2 <- ggplot(grid_search)+
+    geom_tile(aes(x=spill_lab, y=w, fill=specificity))+
+    scale_x_continuous("spillover scalar (e^x)")+
+    scale_y_continuous('colinearity weight')+
+    scale_fill_viridis_c('specificity', option='A', limits=c(0,1))+
+    facet_wrap(facets='syndrome', ncol=4) +
+    theme_classic()+theme(legend.position = 'top')
+
+  pdf(file.path('figures','sensitivity.pdf'), height=13, width=10)
+  print(g1)
+  dev.off()
+  
+  pdf(file.path('figures','specificity.pdf'), height=13, width=10)
+  print(g2)
+  dev.off()
+  
+
+```
+
+
+# Validate with external outbreak data
+
+## Predict outbreaks
+```{r predict_validate}
+outbreaks <- rio::import(file.path('data','bogich-funk_cleaned.xlsx')) %>% 
+               as_tibble %>%
+               mutate(location=country,
+                      ISO=countrycode(location, origin='country.name', destination='iso2c'),
+                      cause=case_when(syndrome=='malaria'~'all malaria',
+                                      syndrome=='meningococcal disease'~'meningococcal septicaemia',
+                                      TRUE~syndrome)) %>%
+               filter(!is.na(syndrome) & syndrome!='NA')
+
+
+contexts <- tibble(country=unique(outbreaks$ISO)) %>%
+            mutate(context=purrr::map(country, function(i){
+                        get_context(location=i, w=0)$priors
+                 }))
+  
+if(calculate.probs){
+  
+  all_res <- NA
+  outbreak_plots <- list()
+  
+  for(i in 1:nrow(outbreaks)){
+      v <- get_linelist(outbreaks[i,], get_context(location='SSA'))
+      v <- v[as.vector(v!='NA')]
+      n_s <- length(v)
+      
+      if(n_s>0) {
+      
+        linelist <- lapply(1:10, function(i) make_dummy_from_mean(v, 100))
+      
+        sim <- sim_outbreak(ref_name='', maxsize = 100, nsample=10,
+                            spill_scalar=0, w=0,
+                            location=outbreaks$ISO[i], linelist=linelist)
+        
+        if(all(is.na(all_res))) {
+          all_res <- sim %>% 
+                     mutate(id=i,
+                            type='real',
+                            location=outbreaks$ISO[i],
+                            outbreak_cause=outbreaks$syndrome[i],
+                            symptoms=n_s)
+        } else {
+          all_res <- rbind(all_res, sim %>% 
+                                    mutate(id=i, 
+                                           type='real',
+                                           location=outbreaks$ISO[i],
+                                           
+                                           outbreak_cause=outbreaks$syndrome[i],
+                                           symptoms=n_s))
+        }
+        
+          
+        out <- ggplot(sim) +
+                  geom_area(aes(x=size, y=prob, fill=syndrome), position='fill')+
+                  theme_classic()+
+                  scale_y_continuous('probability cluster caused by syndrome')+
+                  scale_x_continuous('cluster size')+
+                  ggtitle(paste(outbreaks$syndrome[i], outbreaks$location[i], sep=', '))
+        
+        outbreak_plots[[i]] <- out
+        print(out)
+        
+         sim <- sim_outbreak(ref_name=outbreaks$cause[i],
+                             symps_considered = names(v),
+                             maxsize = 100, nsample=10, spill_scalar=0, w=0,
+                             location=outbreaks$ISO[i])
+         
+         all_res <- rbind(all_res, sim %>% 
+                                    mutate(id=i, 
+                                           type='theory',
+                                           location=outbreaks$ISO[i],
+                                           outbreak_cause=outbreaks$syndrome[i],
+                                           symptoms=n_s))
+         
+    }
+  }
+  
+  all_res <- all_res %>%
+             mutate(correct=case_when(syndrome=='dengue haemorrhagic fever' & outbreak_cause=='dengue'~TRUE,
+                                      syndrome=='complicated malaria' & outbreak_cause=='malaria'~TRUE,
+                                      syndrome=='meningococcal septicaemia' & outbreak_cause=='meningococcal disease'~TRUE,
+                                      syndrome=='all malaria' & outbreak_cause=='malaria'~TRUE,
+                                      syndrome==outbreak_cause~TRUE,
+                                      TRUE~FALSE))
+  
+  res_collapsed <- filter(all_res, correct) %>%
+                   group_by(id, size, type) %>%
+                   dplyr::summarise(prob_correct=sum(prob),
+                             ref_syndrome=first(syndrome),
+                             syndrome=first(outbreak_cause),
+                             country=first(location),
+                             symptoms=first(symptoms)) %>%
+                   tidyr::pivot_wider(names_from=type, values_from=prob_correct) %>%
+                   mutate(performance=real / theory,
+                          prior=purrr::map2_dbl(ref_syndrome, country, function(i,j){
+                             filter(contexts, country==j)$context[[1]][i]
+                          }),
+                          improvement=real - prior)
+                  
+  all_res <- all_res %>%
+             mutate(weight=purrr::map2_dbl(id, size, function(i, j){
+               filter(res_collapsed, id==i, size==j)$theory
+             }))
+
+  save(all_res, file=file.path('data','outbreaks_validation.rda'))
+} else {
+  load(file=file.path('data','outbreaks_validation.rda'))
+}
+
+
+  res_collapsed <- filter(all_res, correct) %>%
+                   group_by(id, size, type) %>%
+                   dplyr::summarise(prob_correct=sum(prob),
+                             ref_syndrome=first(syndrome),
+                             syndrome=first(outbreak_cause),
+                             country=first(location),
+                             symptoms=first(symptoms)) %>%
+                   tidyr::pivot_wider(names_from=type, values_from=prob_correct) %>%
+                   mutate(performance=real / theory,
+                          prior=purrr::map2_dbl(ref_syndrome, country, function(i,j){
+                             filter(contexts, country==j)$context[[1]][i]
+                          }),
+                          improvement=real - prior)
+
+g0 <- ggplot(filter(res_collapsed))+
+  geom_boxplot(aes(x=syndrome, y=improvement))
+
+g1a <- ggplot(filter(res_collapsed, size==10))+
+  geom_point(aes(x=theory, y=real/theory, color=ref_syndrome, size=symptoms))+
+  scale_color_manual(values=v.col)+
+  scale_x_continuous('expected detectability of true aetiology')+
+  scale_y_continuous('performance ratio (log scale)', trans = 'log',
+                     breaks=c(1e-10,1e-9,1e-8,1e-7,1e-6,1e-5,1e-4,1e-3,1e-2,.1,1,10))+
+  scale_size_continuous('number symptoms\nreported')+
+  geom_hline(yintercept=10, lty='dashed')+
+  geom_hline(yintercept=.1, lty='dashed')+
+  geom_hline(yintercept=1)+
+  theme_classic()+
+  guides(color=FALSE, size=FALSE)
+
+g1b <- ggplot(filter(res_collapsed, size==10))+
+  geom_point(aes(x=theory, y=real, color=ref_syndrome, size=symptoms))+
+  scale_color_manual(values=v.col)+
+  scale_x_continuous('expected detectability of true aetiology')+
+  scale_y_continuous('predicted probability of true aetiology')+
+  scale_size_continuous('number symptoms\nreported')+
+  geom_segment(aes(x=0.5, xend=0.5, y=0, yend=0.5), lty='dashed')+
+  geom_segment(aes(x=0.5, xend=1, y=0.5, yend=0.5), lty='dashed')+
+  geom_abline(intercept=0, slope=1, lty='dashed')+
+  theme_classic()+
+  guides(color=FALSE, size=FALSE)
+
+g2a <- ggplot(res_collapsed)+
+  geom_boxplot(aes(x=id, group=id, fill=ref_syndrome, y=performance))+
+  scale_fill_manual(values=v.col)+
+  scale_y_continuous('performance ratio (log scale)', trans = 'log',
+                     breaks=c(1e-10,1e-9,1e-8,1e-7,1e-6,1e-5,1e-4,1e-3,1e-2,.1,1,10))+
+  scale_x_continuous('outbreak', breaks = NULL)+
+  facet_grid(~syndrome, scales='free_x', switch='x')+
+  geom_hline(yintercept=10, lty='dashed')+
+  geom_hline(yintercept=.1, lty='dashed')+
+  geom_hline(yintercept=1)+
+  theme_classic()+
+  theme(axis.line.x=NULL)+
+  guides(fill=FALSE)
+
+g2b <- ggplot(res_collapsed)+
+  geom_boxplot(aes(x=id, group=id, fill=ref_syndrome, y=improvement))+
+  scale_fill_manual(values=v.col)+
+  scale_y_continuous('absolute change from prior')+
+  scale_x_continuous('', breaks = NULL)+
+  facet_grid(~syndrome, scales='free_x')+
+  theme_classic()+
+  guides(fill=FALSE)+
+  theme(axis.line.x=NULL)
+
+g3 <- ggplot(filter(all_res, type=='real'))+
+    geom_bar(aes(x=as.character(id), y=prob, fill=syndrome),
+             stat='identity', position='fill')+
+    scale_x_discrete('outbreak', breaks=NULL) + 
+    scale_y_continuous('predicted probability of aetiology')+
+    theme_classic() +
+    facet_grid(~outbreak_cause, scales='free_x')+
+    scale_fill_manual(values=v.col)
+
+g4 <- ggplot(res_collapsed)+
+  geom_line(aes(x=size, y=real, group=id, color=symptoms))+
+  scale_x_continuous('outbreak size')+
+  scale_y_continuous('predicted probability of true aetiology')+
+  facet_wrap('syndrome', nrow=2)+
+  scale_color_viridis_c('number of symptoms reported', option='A', direction=-1)+
+  theme_classic()+
+  theme(legend.position = 'top')
+
+
+top_row <- cowplot::plot_grid(g2b, g1a, nrow=1, labels=c('A','B'), rel_widths = c(0.6,0.4))
+png(file.path('figures','validation_performance.png'), height=7, width=12, units='in', res=300)
+cowplot::plot_grid(top_row, g3, nrow=2, labels=c('','C'))
+dev.off()
+
+pdf(file.path('figures','south-asia.pdf'), height=5, width=5.5)
+print(g4)
+dev.off()
+
+melted_outbreaks <- tidyr::pivot_longer(outbreaks, cols=context$symptom_names)
+
+g1 <- plot_syndromes(list(context$syndromes[['meningococcal septicaemia']])) 
+g1[[1]] + 
+  geom_point(aes(y=as.numeric(value), x=name), 
+             data=filter(melted_outbreaks, 
+                         syndrome=='meningococcal disease' & 
+                         value!='NA'))
+
+
+g2 <- plot_syndromes(list(context$syndromes[['dengue']])) 
+g2[[1]] + 
+  geom_point(aes(y=as.numeric(value), x=name), 
+             data=filter(melted_outbreaks, 
+                         syndrome=='dengue fever' & 
+                         value!='NA'))
+
+
+g3 <- plot_syndromes(list(context$syndromes[['complicated malaria']])) 
+g3[[1]] + 
+  geom_point(aes(y=as.numeric(value), x=name), 
+             data=filter(melted_outbreaks, 
+                         syndrome=='malaria' & 
+                         value!='NA'))
+
+
+g4 <- plot_syndromes(list(context$syndromes[['typhoid fever']])) 
+g4[[1]] + 
+  geom_point(aes(y=as.numeric(value), x=name), 
+             data=filter(melted_outbreaks, 
+                         syndrome=='typhoid fever' & 
+                         value!='NA'))
+
+```
+# Clinical feature clustering
+```{r}
+context <- get_context(location='SSA', w=1)
+sims <- get_thetas(context$syndromes, context$priors, w=1, return_sims=TRUE)
+dd <- dist(scale(t(sims)), method = "euclidean")
+hc <- hclust(dd)
+
+pdf(file.path('figures','dendro.pdf'), height=3.5, width=5)
+print(ggdendrogram(hc, rotate=TRUE))
+dev.off()
+
+nsymp <- length(context$symptom_names)
+dists <- as_tibble(expand.grid(s1=context$syndrome_names,
+                               s2=context$syndrome_names)) %>%
+         mutate(distance=purrr::map2_dbl(s1, s2, function(i, j){
+           xx <- sapply(1:nsymp, function(x) {
+             sum((sort(context$syndromes[[i]]$sample[[x]]) -
+                  sort(context$syndromes[[j]]$sample[[x]]))^2) * context$syndromes[[i]]$theta[x]
+         })
+           return(sqrt(sum(xx)))
+         }),
+         distance2=distance/max(distance)
+         )
+
+mat <- dists %>%
+       tidyr::pivot_wider(names_from=s2, values_from=distance2) %>%
+       select(-'distance') %>%
+       group_by(s1) %>%
+       summarise_all(list(~max(., na.rm=TRUE))) %>%
+       select(-'s1') %>%
+       as.matrix
+rownames(mat) <- colnames(mat)
+
+
+dd <- dist(mat, method = "euclidean")
+hc <- hclust(dd)
+
+spe.o <- 1:length(hc$labels)
+names(spe.o) <- hc$labels[hc$order]
+
+dists <- mutate(dists,
+                order1=purrr::map_dbl(s1, function(x) spe.o[x]),
+                order2=purrr::map_dbl(s2, function(x) spe.o[x]))
+
+tri <- tibble(x=c(0,22,22), y=c(0,0,22))
+g1 <- ggplot(dists)+
+  geom_raster(aes(x=order1, y=order2, fill=distance2))+
+  scale_fill_viridis_c('syndromic distance', option='A', direction=-1)+
+  geom_polygon(aes(x=x, y=y), data=tri, fill='white')+
+  theme_classic()+
+  theme(axis.text.x=element_text(angle=-45, hjust=1, vjust=1))+
+  scale_x_continuous('', breaks=spe.o, labels=names(spe.o), position='top')+
+  scale_y_continuous('', breaks=spe.o, labels=names(spe.o))
+
+g2 <- ggdendrogram(hc, rotate=TRUE)
+
+  
+png(file.path('figures','syndromic_dist.png'), height=8.5, width=7.5, units='in', res=300)
+cowplot::plot_grid(g1, g2, ncol=1, rel_heights=c(0.6, 0.4), labels=c('A','B'))
+dev.off()
+
+
+#dists <- tsne::tsne(t(sims), k=2, max_iter = 100, perplexity=30) %>%
+#         as_tibble %>%
+#         mutate(symptom=context$symptom_names)
+
+#ggplot(dists)+
+#  geom_point(aes(x=V1, y=V2, color=symptom))
+```
+
+# Theoretical detection sizes
+
+```{r sizes}
+if(calculate.probs){
+  sim_all_symps <- sim_outbreak(maxsize = 20, nsample=100,
+                          spill_scalar=10000, w=0,
+                          ref_name='all', def_name='all symptoms',
+                          location='SSA') %>% 
+             bind_rows(.id='ref')
+  
+  sim_typical <- sim_outbreak(maxsize = 20, nsample=100,
+                          spill_scalar=10000, w=0,
+                          ref_name='all', def_name='typical symptoms',
+                          symps_considered='typical',
+                          location='SSA') %>% 
+                  bind_rows(.id='ref')
+                  
+    
+  sim_minimal <-sim_outbreak(maxsize = 20, nsample=100,
+                          spill_scalar=10000, w=0,
+                          ref_name='all', def_name='minimal VHF symptoms',
+                          symps_considered='minimal',
+                          location='SSA') %>% 
+                  bind_rows(.id='ref')
+  
+  sim_all_symps <- rbind(sim_all_symps,
+                         sim_typical,
+                         sim_minimal) %>%
+                   mutate(correct=map2_lgl(ref, syndrome, function(i,j) i==j))
+  
+  save(sim_all_symps, file=file.path('data','sim_all.rda'))
+} else {
+  load(file=file.path('data','sim_all.rda'))
+}
+  g1 <- ggplot(filter(sim_all_symps, info=='all symptoms')) +
+    geom_area(aes(x=size, y=prob, fill=syndrome), position='fill')+
+    geom_point(aes(x=19, y=0.9, fill=ref), color='black', pch=22, size=4)+
+    theme_classic()+
+    scale_y_continuous('probability cluster caused by syndrome')+
+    scale_x_continuous('cluster size', breaks=seq(1,19,3))+
+    scale_fill_manual(values=v.col) +
+    facet_wrap('ref', ncol=4) + theme(
+      legend.position = c(0.6, 0.075),
+      legend.background = element_rect(fill = "white", colour = NA)
+    ) +
+    guides(fill=guide_legend(nrow=6))+
+    theme(strip.text = element_text(size = 10),
+          strip.text.x = element_text(margin = margin(0.5, 0, 0.5, 0, "mm")))
+  
+  g2 <-  ggplot(filter(sim_all_symps, correct)) +
+    geom_raster(aes(x=size, fill=prob, y=reorder(ref, prob)))+
+    theme_classic()+
+    scale_y_discrete('')+
+    scale_x_continuous('cluster size')+
+    scale_fill_viridis_c('estimated detectability', option='A') +
+    facet_wrap('info', ncol=3) + 
+    guides(fill=guide_legend(nrow=6))
+  
+  
+  pdf(file.path('figures','sand_plot.pdf'), width=12, height=12)
+  print(g1)
+  dev.off()
+  
+  png(file.path('figures','symps_considered.png'), width=9, height=5, units='in', res=300)
+  print(g2)
+  dev.off()
+  
+```
+
+# Spatial analysis {.tabset .tabset-fade .tabset-pills}
+
+
+## Estimate spillover
+
+```{r estimate_spillover}
+
+max.cluster <- 10
+nsample <- 5
+
+if(do.spatial){
+  
+  sim <- sim_outbreak(maxsize = max.cluster, nsample=nsample,
+                        spill_scalar=10000, w=0,
+                        ref_name='Ebola virus disease',
+                        only.ref = TRUE, location='SSA', keep_dummy=TRUE)
+  linelist_dummy <- sim$linelist
+     
+  for(i in 1:(nrow(spill.map.df)/max.cluster)*max.cluster){
+    country <- as.character(spill.map.df$ISO2[i])
+    
+    localInc <- filter(inc_data, ISO==country) %>%
+                  mutate(incidence=case_when(
+                    syndrome=='typhoid fever' & !is.na(spill.map.df$Typhoid[i]) ~ spill.map.df$Typhoid[i],
+                    syndrome=='yellow fever' & !is.na(spill.map.df$YF[i]) ~ spill.map.df$YF[i],
+                    syndrome=='all malaria' & !is.na(spill.map.df$Malaria[i]) ~ spill.map.df$Malaria[i],
+                    syndrome=='diarrheal diseases' & !is.na(spill.map.df$Diarrhea[i]) ~ spill.map.df$Diarrhea[i],
+                    syndrome=='invasive non-typhoidal Salmonella (iNTS)' & !is.na(spill.map.df$INTS[i]) ~ spill.map.df$INTS[i],
+                    syndrome=='dengue' & !is.na(spill.map.df$Dengue[i]) ~ spill.map.df$Dengue[i],
+                    syndrome=='dengue haemorrhagic fever' & !is.na(spill.map.df$DengueHF[i])~ spill.map.df$DengueHF[i],
+                    syndrome=='complicated malaria' & !is.na(spill.map.df$CMalaria[i]) ~ spill.map.df$CMalaria[i],
+                    syndrome=='Crimean-Congo haemorrhagic fever' & !is.na(spill.map.df$CCHF[i]) ~ spill.map.df$CCHF[i],
+                    TRUE~as.numeric(incidence)
+                ))
+      
+    x <- spill.map.df$x[i]
+    y <- spill.map.df$y[i]
+    
+    localInc$incidence <- localInc$incidence/sum(localInc$incidence)
+    priors <- localInc$incidence
+    names(priors) <- localInc$syndrome
+      
+    sim <- sim_outbreak(maxsize = max.cluster, nsample=nsample, spill_scalar=10000, w=0,
+                        ref_name='Ebola virus disease', linelist=linelist_dummy, 
+                        only.ref = TRUE, priors=priors, keep_dummy=TRUE)
+    sim <- sim$result %>%
+           mutate(x=x,
+                  y=y)
+      
+    spill.map.df[(i-max.cluster+1):i, 'ebola.prob'] <- sim$prob
+    
+      print(paste(round(100*i/nrow(spill.map.df),4),'% done',sep=''))
+      if(i%%500==0) save(spill.map.df,file=file.path('data','spillmap-endemic-EVD-TEMP.Rda'))
+  }
+  save(spill.map.df,
+       file=file.path('data',paste('spillmap_EVD_maxsize-',max.cluster,'_n-',nsample,'.Rda',sep="")))
+  save(linelist_dummy, 
+       file=file.path('data',paste('linelist_maxsize-',max.cluster,'_n-',nsample,'.rda',sep="")))
+} else {
+  load(file.path('data', paste('spillmap_EVD_maxsize-',max.cluster,'_n-',nsample,'.Rda',sep="")))
+  load(file.path('data', paste('linelist_maxsize-',max.cluster,'_n-',nsample,'.rda',sep="")))
+}
+```
+
+## Spatial plots
+
+```{r spatial_plots}
+africa <- ne_countries(scale = "medium", continent='Africa', returnclass = "sf")
+
+g1 <- ggplot(filter(spill.map.df, cluster==10)) +
+  geom_sf(data=africa, fill='grey50')+
+ geom_raster(aes(x=x, y=y, fill=Dengue)) +
+        geom_sf(data=africa, fill=NA, color='white')+
+  scale_y_continuous(limits=c(-20,15))+
+ scale_fill_viridis_c(option='A')+
+ theme_classic()+
+  guides(fill=FALSE)+
+  theme(axis.ticks = element_blank(), axis.line = element_blank(), 
+        axis.text = element_blank(), axis.title = element_blank())
+
+g2 <- ggplot(filter(spill.map.df, cluster==10)) +
+    geom_sf(data=africa, fill='grey50')+
+ geom_raster(aes(x=x, y=y, fill=CCHF)) +
+        geom_sf(data=africa, fill=NA, color='white')+
+    scale_y_continuous(limits=c(-20,15))+
+scale_fill_viridis_c(option='A')+
+ theme_classic()+
+  guides(fill=FALSE)+
+  theme(axis.ticks = element_blank(), axis.line = element_blank(), 
+        axis.text = element_blank(), axis.title = element_blank())
+
+g3 <- ggplot(filter(spill.map.df, cluster==10)) +
+    geom_sf(data=africa, fill='grey50')+
+ geom_raster(aes(x=x, y=y, fill=Malaria)) +
+        geom_sf(data=africa, fill=NA, color='white')+
+    scale_y_continuous(limits=c(-20,15))+
+scale_fill_viridis_c(option='A')+
+ theme_classic()+
+  guides(fill=FALSE)+
+  theme(axis.ticks = element_blank(), axis.line = element_blank(), 
+        axis.text = element_blank(), axis.title = element_blank())
+
+g4 <- ggplot(filter(spill.map.df, cluster==10)) +
+    geom_sf(data=africa, fill='grey50')+
+ geom_raster(aes(x=x, y=y, fill=Diarrhea)) +
+        geom_sf(data=africa, fill=NA, color='white')+
+    scale_y_continuous(limits=c(-20,15))+
+scale_fill_viridis_c(option='A')+
+ theme_classic()+
+  guides(fill=FALSE)+
+  theme(axis.ticks = element_blank(), axis.line = element_blank(), 
+        axis.text = element_blank(), axis.title = element_blank())
+
+g5 <- ggplot(filter(spill.map.df, cluster==10)) +
+    geom_sf(data=africa, fill='grey50')+
+   geom_raster(aes(x=x, y=y, fill=YF)) +
+        geom_sf(data=africa, fill=NA, color='white')+
+    scale_y_continuous(limits=c(-20,15))+
+   scale_fill_viridis_c(option='A')+
+   theme_classic()+
+  guides(fill=FALSE)+
+  theme(axis.ticks = element_blank(), axis.line = element_blank(), 
+        axis.text = element_blank(), axis.title = element_blank())
+
+g6 <- ggplot(filter(spill.map.df, cluster==10)) +
+    geom_sf(data=africa, fill='grey50')+
+ geom_raster(aes(x=x, y=y, fill=EVDrisknorm)) +
+      geom_sf(data=africa, fill=NA, color='white')+
+    scale_y_continuous(limits=c(-20,15))+
+ scale_fill_viridis_c(option='A')+
+ theme_classic()+
+ guides(fill=FALSE)+
+  theme(axis.ticks = element_blank(), axis.line = element_blank(), 
+        axis.text = element_blank(), axis.title = element_blank())
+
+fs6 <- cowplot::plot_grid(g1,g2,g3,g4,g5,g6, ncol=2, align='h', label_x=0.2, hjust=0,
+                   labels=c('A. dengue', 'B. CCHF', 'C. malaria',
+                            'D. diarrheal disease', 'E. yellow fever', 'F. Ebola'))
+png(file.path('figures','all_maps.png'), width=8.5, height=8, units='in', res=300)
+print(fs6)
+dev.off()
+
+
+
+
+
+converted <- spill.map.df %>%
+             filter(cluster==1) %>%
+             st_as_sf(coords=c('x','y')) %>%
+             raster(crs="+proj=longlat +datum=WGS84") %>%
+             rasterToPolygons()
+
+rgeos::gArea(converted, byid=TRUE)
+
+
+
+
+f5a <- ggplot(filter(spill.map.df, cluster==10)) +
+       geom_sf(data=africa, fill='grey50')+
+       geom_raster(aes(x=x, y=y, fill=ebola.prob)) +
+       geom_sf(data=africa, fill=NA)+
+       scale_y_continuous(limits=c(-20,15))+
+       scale_fill_viridis_c('detectability\n(10 cases)', direction=-1)+
+       theme_classic()+
+       theme(axis.ticks = element_blank(), axis.line = element_blank(), 
+             axis.text = element_blank(), axis.title = element_blank())
+
+
+
+bivmap <- bivariate.map(filter(spill.map.df,cluster==10), nquantiles=50, 
+                        ylab='spillover risk', xlab='detectability')
+
+f5b <- ggplot(bivmap$map)+
+  theme_classic()+
+  geom_sf(data=africa, fill='grey50')+
+  geom_raster(aes(x=x, y=y, fill=color))+
+  geom_sf(data=africa, fill=NA)+
+  scale_y_continuous(limits=c(-5,10))+
+  scale_x_continuous(limits=c(-15,39))+
+  scale_fill_identity()+
+  theme(axis.ticks = element_blank(), axis.line = element_blank(), 
+        axis.text = element_blank(), axis.title = element_blank())
+biv_legend <- bivmap$legend
+
+bottom_row <- cowplot::plot_grid(f5b, biv_legend, nrow=1, rel_widths = c(0.75,0.25))
+full_f5 <- cowplot::plot_grid(f5a, bottom_row, nrow=2, labels=c('A','B'), rel_heights=c(0.65,0.35))
+
+png(file.path('figures','figure5.png'), height=5.5,width=8, units='in', res=300)
+print(full_f5)
+dev.off()
+
+```
