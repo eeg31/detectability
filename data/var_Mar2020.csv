@@ -1,0 +1,23 @@
+﻿syndrome,death,fever,any haemorrhage/bleeding,diarrhea,nausea/vomiting,jaundice,headache,fatigue/weakness,anorexia,sore throat,cough,hiccups,abdominal pain,myalgia/arthralgia,conjunctivitis,severe neurological,rash,hepato/splenomegaly
+yellow fever,5,8,7,7,8,10,5,3,2,10,10,10,5,7,2,7,8,2
+meningococcal septicaemia,5,8,7,3,8,10,5,4,2,10,10,3,5,7,10,7,4,7
+invasive non-typhoidal Salmonella (iNTS),5,8,7,7,8,10,5,4,2,10,10,10,5,7,10,7,8,7
+acute hepatitis C,5,8,7,7,8,10,3,4,4,10,10,3,5,7,10,4,8,7
+typhoid fever,5,4,7,7,8,10,5,4,4,10,10,10,5,7,2,7,8,7
+acute hepatitis E,5,8,2,7,8,10,5,4,3,10,10,3,5,7,10,2,8,7
+dengue,5,8,7,7,8,10,5,4,4,10,10,3,5,7,2,7,8,7
+dengue haemorrhagic fever,5,8,7,7,8,10,5,4,4,10,10,3,5,7,2,7,8,7
+acute hepatitis B,5,8,7,2,8,10,5,4,3,2,10,3,2,7,10,4,8,7
+acute hepatitis A,5,4,4,4,8,10,5,4,3,5,5,3,5,7,10,4,4,7
+lower respiratory infections,3,4,4,4,8,10,2,2,2,5,5,3,2,2,10,7,4,7
+all malaria,5,8,7,7,8,10,5,4,2,2,2,10,5,7,10,7,8,7
+complicated malaria,5,8,7,7,8,10,5,4,2,2,10,10,5,7,2,7,8,7
+diarrheal diseases,5,4,3,4,8,10,2,2,2,5,5,10,2,7,10,7,4,2
+upper respiratory infections,5,4,4,4,5,10,5,4,2,5,5,10,2,7,10,7,4,7
+Ebola virus disease,5,8,7,7,8,10,3,4,4,10,10,10,5,7,10,2,8,7
+Marburg virus disease,5,8,7,7,8,10,5,4,4,10,10,10,5,7,10,2,8,2
+Lassa virus disease,5,8,7,7,8,10,5,4,4,10,10,10,5,7,10,2,8,2
+leptospirosis,5,8,7,7,8,10,5,3,4,10,10,10,5,7,10,7,8,7
+Rift Valley fever,5,8,7,7,8,10,5,3,4,10,3,10,5,7,10,7,8,7
+epidemic typhus,5,8,7,7,8,10,5,4,4,10,10,10,5,7,10,7,8,7
+Crimean-Congo haemorrhagic fever,5,4,4,4,8,5,5,4,2,2,2,2,5,7,2,2,4,2

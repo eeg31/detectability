@@ -1,0 +1,289 @@
+measure_id,measure_name,location_id,location_name,sex_id,sex_name,age_id,age_name,cause_id,cause_name,metric_id,metric_name,year,val,upper,lower
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,644,Orofacial clefts,3,Rate,2017,4.63595025721,6.07123976062,3.4653428106599997
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,645,Down syndrome,3,Rate,2017,2.52308450345,3.03537917142,2.1372812421200003
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,646,Turner syndrome,3,Rate,2017,0.685758036032,0.804053431364,0.592366309966
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,647,Klinefelter syndrome,3,Rate,2017,0.642079099737,0.749117355163,0.548390871244
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,648,Other chromosomal abnormalities,3,Rate,2017,12.258804834,14.898491060800001,9.82204010421
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,649,Congenital musculoskeletal and limb anomalies,3,Rate,2017,39.8038890913,46.5306964612,34.169855283800004
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,650,Urogenital congenital anomalies,3,Rate,2017,5.09205574044,5.76569215607,4.4406344538499996
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,651,Digestive congenital anomalies,3,Rate,2017,8.55621349099,9.646393244650001,7.62769080061
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,652,Other congenital birth defects,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,655,Psoriasis,3,Rate,2017,71.0199718034,75.1601822941,67.1666044949
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,656,Cellulitis,3,Rate,2017,361.40739883599997,388.894049159,334.921786759
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,657,Pyoderma,3,Rate,2017,8063.2105790000005,8402.06062137,7736.832297020001
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,658,Scabies,3,Rate,2017,6803.48403304,7953.36644982,5824.79763781
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,659,Fungal skin diseases,3,Rate,2017,34258.5633922,37998.3378508,30675.283491
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,660,Viral skin diseases,3,Rate,2017,2086.9683039,2211.42287283,1959.7832930599998
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,661,Acne vulgaris,3,Rate,2017,689.7392538590001,829.576689308,576.111187012
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,662,Alopecia areata,3,Rate,2017,279.446885833,290.562324773,269.10462444399997
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,663,Pruritus,3,Rate,2017,565.996333363,640.822977507,497.962307496
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,664,Urticaria,3,Rate,2017,2237.1425732099997,2587.91029707,1919.54374321
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,665,Decubitus ulcer,3,Rate,2017,26.114228838800003,28.919465924399997,23.508237692599998
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,668,Other skin and subcutaneous diseases,3,Rate,2017,4390.49532634,4505.13356865,4281.96114046
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,546,Multiple sclerosis,3,Rate,2017,0.248168958987,0.28648373530399995,0.214832759844
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,547,Migraine,3,Rate,2017,1432.45403169,1577.28687043,1296.66209436
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,548,Tension-type headache,3,Rate,2017,9903.95230471,11176.8544,8628.20719762
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,554,Motor neuron disease,3,Rate,2017,0.332962279308,0.380100985857,0.29135962847400004
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,679,Other sense organ diseases,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,681,Caries of deciduous teeth,3,Rate,2017,21676.068663500002,29056.0674435,15250.6905508
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,682,Caries of permanent teeth,3,Rate,2017,25739.729015099998,29023.568075400002,22964.4882842
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,683,Periodontal diseases,3,Rate,2017,492.15278821199996,573.920138348,415.46295912299996
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,684,Edentulism and severe tooth loss,3,Rate,2017,72.81698300309999,82.12932669359999,63.964876963900004
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,685,Other oral disorders,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,690,Pedestrian road injuries,3,Rate,2017,131.398857846,158.745708488,108.476154385
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,691,Cyclist road injuries,3,Rate,2017,85.655689536,110.108183387,66.0298197027
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,692,Motorcyclist road injuries,3,Rate,2017,48.7760290414,61.6883345551,37.741600456200004
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,693,Motor vehicle road injuries,3,Rate,2017,164.206607936,198.535855707,134.826352884
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,694,Other road injuries,3,Rate,2017,66.11339652870001,85.80739347080001,49.3017587792
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,695,Other transport injuries,3,Rate,2017,102.383735907,127.73317565100001,83.65984564109999
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,697,Falls,3,Rate,2017,1297.47734886,1550.8004847299999,1091.78890591
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,698,Drowning,3,Rate,2017,4.02089732813,4.73355453014,3.48263322719
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,845,Acute lymphoid leukemia,3,Rate,2017,0.560204505983,0.716363286947,0.45519737557900003
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,846,Chronic lymphoid leukemia,3,Rate,2017,0.148779081167,0.173355643234,0.115101699282
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,847,Acute myeloid leukemia,3,Rate,2017,0.993310292558,1.1547724184100001,0.751491131847
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,848,Chronic myeloid leukemia,3,Rate,2017,0.29436264314,0.346605790599,0.23717623977299998
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,849,Non-melanoma skin cancer (squamous-cell carcinoma),3,Rate,2017,1.30801118499,1.93015421945,0.834650311322
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,850,Non-melanoma skin cancer (basal-cell carcinoma),3,Rate,2017,12.779594384100001,19.991304709,7.53864632757
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,854,Executions and police conflict,3,Rate,2017,42.0305890845,53.632382157799995,34.2960624266
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,934,Drug-susceptible tuberculosis,3,Rate,2017,271.30188249599996,299.073722084,247.39557073900002
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,935,Zika virus,3,Rate,2017,1.02975430123,1.88190610406,0.770315051405
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,936,Guinea worm disease,3,Rate,2017,0.0031636776448700004,0.00438281614654,0.00213079249905
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,699,"Fire, heat, and hot substances",3,Rate,2017,137.81039422400002,169.72101032499998,112.34532159999999
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,701,Poisoning by carbon monoxide,3,Rate,2017,9.90180933949,14.8392752544,6.57751697222
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,703,Poisoning by other means,3,Rate,2017,40.3945013842,54.907606656000006,29.203804269899997
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,705,Unintentional firearm injuries,3,Rate,2017,35.1863145274,47.1488389618,25.0932677956
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,707,Other exposure to mechanical forces,3,Rate,2017,901.355812289,1059.94638313,757.837674056
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,708,Adverse effects of medical treatment,3,Rate,2017,150.933223319,177.20547896899998,125.343024423
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,710,Venomous animal contact,3,Rate,2017,264.443461693,333.815040226,206.879773107
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,604,Uterine fibroids,3,Rate,2017,82.0227845715,112.695137327,60.8965597658
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,605,Polycystic ovarian syndrome,3,Rate,2017,25.407448129500004,32.6475298863,20.496454731300002
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,606,Female infertility,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,607,Endometriosis,3,Rate,2017,58.865317841499994,71.9311996244,47.0138188245
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,608,Genital prolapse,3,Rate,2017,175.540028817,198.047599477,153.509749414
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,609,Premenstrual syndrome,3,Rate,2017,1509.00517315,1609.43098213,1402.6152760999998
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,612,Other gynecological diseases,3,Rate,2017,442.42015777099994,465.589151029,419.944035618
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,614,Thalassemias,3,Rate,2017,0.21190646497899998,0.23088308523999998,0.194186740564
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,615,Sickle cell disorders,3,Rate,2017,39.412430502599996,45.3176207774,34.4137933738
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,616,G6PD deficiency,3,Rate,2017,336.209088708,356.673582108,317.25521784
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,618,Other hemoglobinopathies and hemolytic anemias,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,619,"Endocrine, metabolic, blood, and immune disorders",3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,627,Rheumatoid arthritis,3,Rate,2017,7.6698215653799995,8.50840763104,6.85711966086
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,628,Osteoarthritis,3,Rate,2017,75.25419805130001,85.4431354689,66.5969726879
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,630,Low back pain,3,Rate,2017,2336.35961786,2602.9569415,2097.01770684
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,631,Neck pain,3,Rate,2017,466.166796935,537.2383735469999,410.07506036
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,632,Gout,3,Rate,2017,46.741182056300005,52.971260875999995,41.226999175699994
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,639,Other musculoskeletal disorders,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,642,Neural tube defects,3,Rate,2017,8.378256123669999,9.54088102476,7.3480587136599995
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,938,Alcoholic cardiomyopathy,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,591,Chronic kidney disease due to hypertension,3,Rate,2017,18.1999472216,21.820058882199998,15.120022190599999
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,592,Chronic kidney disease due to glomerulonephritis,3,Rate,2017,13.1754234181,14.901797006299999,11.8362773
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,593,Chronic kidney disease due to other and unspecified causes,3,Rate,2017,161.995944284,180.23941527,146.0448901
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,711,Non-venomous animal contact,3,Rate,2017,428.99056176,523.5549142259999,350.33070834899996
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,713,Pulmonary aspiration and foreign body in airway,3,Rate,2017,11.3584194712,15.4145229583,8.145979004520001
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,714,Foreign body in eyes,3,Rate,2017,294.35257738999996,361.846707804,240.41670711999998
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,715,Foreign body in other body part,3,Rate,2017,65.4583286938,86.054683368,50.6871636547
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,716,Other unintentional injuries,3,Rate,2017,336.51860936500003,409.61369980499995,276.31109373699996
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,721,Self-harm by firearm,3,Rate,2017,0.570686340318,0.86120589461,0.356647467404
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,723,Self-harm by other specified means,3,Rate,2017,24.3242815716,28.8364875432,20.5084179676
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,725,Physical violence by firearm,3,Rate,2017,7.8884701244499995,10.4655268514,5.94883170396
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,726,Physical violence by sharp object,3,Rate,2017,76.9028110424,97.0012961883,59.844104065100005
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,727,Physical violence by other means,3,Rate,2017,254.06938598600001,298.239516365,217.257300084
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,729,Exposure to forces of nature,3,Rate,2017,7.77077479969,9.46934141288,6.419396807
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,837,Thalassemias trait,3,Rate,2017,41.704198938400005,43.9997263243,39.649400710100004
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,838,Sickle cell trait,3,Rate,2017,511.832972021,550.604740886,477.43873880499996
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,839,G6PD trait,3,Rate,2017,587.704075282,599.84427077,576.151813521
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,842,Environmental heat and cold exposure,3,Rate,2017,110.46328797700001,136.404626968,90.1663719016
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,843,Ebola,3,Rate,2017,0.00156026739545,0.00184374490862,0.00125077442945
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,342,Varicella and herpes zoster,3,Rate,2017,1685.31982238,1749.22509033,1622.61679779
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,345,Malaria,3,Rate,2017,17665.3402152,22355.625176499998,13995.786847399999
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,346,Chagas disease,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,348,Visceral leishmaniasis,3,Rate,2017,2.38634220059,4.57504177953,1.46964760484
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,349,Cutaneous and mucocutaneous leishmaniasis,3,Rate,2017,0.8005921298309999,1.29873682737,0.463389374379
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,350,African trypanosomiasis,3,Rate,2017,0.323778555541,0.791399944045,0.19124189436900002
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,351,Schistosomiasis,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,352,Cysticercosis,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,353,Cystic echinococcosis,3,Rate,2017,0.588335257615,0.8502043562650001,0.389308856107
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,354,Lymphatic filariasis,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,355,Onchocerciasis,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,356,Trachoma,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,357,Dengue,3,Rate,2017,710.402758838,1070.0624880799999,438.046452665
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,358,Yellow fever,3,Rate,2017,8.50392179053,22.151945788,2.4677440409
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,359,Rabies,3,Rate,2017,0.422587062935,0.6325214814969999,0.291270527059
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,361,Ascariasis,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,362,Trichuriasis,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,363,Hookworm disease,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,364,Food-borne trematodiases,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,365,Other neglected tropical diseases,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,336,Other meningitis,3,Rate,2017,180.77701292700002,213.821754262,156.641401624
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,337,Encephalitis,3,Rate,2017,41.2166796291,42.068648337,40.3192087066
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,338,Diphtheria,3,Rate,2017,1.1205158959400001,1.90417290049,0.668958273858
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,339,Whooping cough,3,Rate,2017,513.632204193,651.6339196819999,392.457735979
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,340,Tetanus,3,Rate,2017,3.1357166588400003,4.67766056314,2.03403437041
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,341,Measles,3,Rate,2017,475.499665317,1071.83963849,167.165908282
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,514,Other pneumoconiosis,3,Rate,2017,0.05166035359130001,0.062000640739799995,0.0426190360595
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,515,Asthma,3,Rate,2017,815.8633369949999,995.4337718469999,652.59904339
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,516,Interstitial lung disease and pulmonary sarcoidosis,3,Rate,2017,3.5756129331600004,3.95782378856,3.2136472449199998
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,520,Other chronic respiratory diseases,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,522,Cirrhosis and other chronic liver diseases due to hepatitis B,3,Rate,2017,21.386948431,23.6741126267,19.0450513902
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,523,Cirrhosis and other chronic liver diseases due to hepatitis C,3,Rate,2017,13.6760414947,15.442976486,12.119387614
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,524,Cirrhosis and other chronic liver diseases due to alcohol use,3,Rate,2017,8.63900942989,9.62640256094,7.76116436861
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,525,Cirrhosis and other chronic liver diseases due to other causes,3,Rate,2017,35.681785425200005,38.8197514215,32.6176649698
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,527,Peptic ulcer disease,3,Rate,2017,76.7881497031,85.7795829984,68.472961406
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,528,Gastritis and duodenitis,3,Rate,2017,1331.95680062,1498.54777079,1196.18908925
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,529,Appendicitis,3,Rate,2017,308.14368635200003,330.19501419799997,285.223670094
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,530,Paralytic ileus and intestinal obstruction,3,Rate,2017,35.8078173811,40.0688504635,31.832626178399998
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,531,"Inguinal, femoral, and abdominal hernia",3,Rate,2017,132.976815292,149.249417869,116.58667582599999
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,532,Inflammatory bowel disease,3,Rate,2017,32.139488572800005,33.8838258761,30.5369607035
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,533,Vascular intestinal disorders,3,Rate,2017,1.29959912653,1.4530148218399999,1.14708175425
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,534,Gallbladder and biliary diseases,3,Rate,2017,16.9397625102,19.4277842286,14.6583821831
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,535,Pancreatitis,3,Rate,2017,2.54567659172,2.80879242453,2.30599656464
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,536,Gastroesophageal reflux disease,3,Rate,2017,2891.33235657,3305.8378566,2507.51868948
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,541,Other digestive diseases,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,543,Alzheimer's disease and other dementias,3,Rate,2017,25.2963939482,28.4852086608,22.3324259014
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,544,Parkinson's disease,3,Rate,2017,3.79811617072,4.58050493909,3.1487281557699998
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,545,Epilepsy,3,Rate,2017,45.6165719993,62.7582442295,30.360345828699998
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,670,Glaucoma,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,671,Cataract,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,672,Age-related macular degeneration,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,674,Age-related and other hearing loss,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,675,Other vision loss,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,975,Diabetes mellitus type 1,3,Rate,2017,6.139327911990001,6.945922281410001,5.46267712669
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,976,Diabetes mellitus type 2,3,Rate,2017,202.62569634000002,222.383180965,185.187623529
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,977,Atopic dermatitis,3,Rate,2017,541.782140369,608.6733950180001,477.819711605
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,978,Contact dermatitis,3,Rate,2017,2118.2682709600003,2442.0271703500002,1807.68876652
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,979,Seborrhoeic dermatitis,3,Rate,2017,159.28438196099998,173.093593873,147.057738
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,995,Maternal abortion and miscarriage,3,Rate,2017,644.2501159420001,829.532805599,512.939269795
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,996,Liver cancer due to NASH,3,Rate,2017,0.40298923168000006,0.464321370824,0.346603339376
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,997,Chronic kidney disease due to diabetes mellitus type 1,3,Rate,2017,2.16947786549,3.08854732908,1.5626448521899998
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,998,Chronic kidney disease due to diabetes mellitus type 2,3,Rate,2017,20.2145723483,23.2676915858,17.800562113799998
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,999,Refraction disorders,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,1000,Near vision loss,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,941,Sexual violence,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,942,Myocarditis,3,Rate,2017,26.2858440441,29.7223030518,23.2628502125
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,943,Other leukemia,3,Rate,2017,0.9220036768390001,1.05427078453,0.695178794303
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,944,Other cardiomyopathy,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,945,Conflict and terrorism,3,Rate,2017,228.966166978,278.50434051999997,195.98700759599998
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,946,Multidrug-resistant tuberculosis without extensive drug resistance,3,Rate,2017,8.564367989760001,12.7012671883,5.8428161871299995
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,947,Extensively drug-resistant tuberculosis,3,Rate,2017,0.0552536015464,0.08195305788479999,0.0376973653413
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,948,HIV/AIDS - Drug-susceptible Tuberculosis,3,Rate,2017,93.139032816,102.624090459,84.4309588424
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,949,HIV/AIDS - Multidrug-resistant Tuberculosis without extensive drug resistance,3,Rate,2017,3.4696296859,4.92739121407,2.4330138625699997
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,950,HIV/AIDS - Extensively drug-resistant Tuberculosis,3,Rate,2017,0.0223846370427,0.0317909658484,0.0156971168123
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,954,Latent tuberculosis infection,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,959,Invasive Non-typhoidal Salmonella (iNTS),3,Rate,2017,41.0868830733,55.9494903561,30.7960257638
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,964,"Myelodysplastic, myeloproliferative, and other hematopoietic neoplasms",3,Rate,2017,0.38302510285900004,0.455768171698,0.319020357239
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,965,Benign and in situ intestinal neoplasms,3,Rate,2017,0.907602316166,0.952190985869,0.8666371502360001
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,966,Benign and in situ cervical and uterine neoplasms,3,Rate,2017,0.127608848876,0.141022173005,0.115483957966
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,967,Other benign and in situ neoplasms,3,Rate,2017,31.042561421,32.227603842,29.960226161699996
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,968,Non-rheumatic calcific aortic valve disease,3,Rate,2017,18.6776979356,20.9985858444,16.6005499775
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,969,Non-rheumatic degenerative mitral valve disease,3,Rate,2017,81.6647435748,84.0051291804,79.484212255
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,404,Acute hepatitis E,3,Rate,2017,311.379180828,358.47688706,270.403193489
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,405,Leprosy,3,Rate,2017,0.595230833959,0.621744059627,0.568239703243
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,408,Other unspecified infectious diseases,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,411,Esophageal cancer,3,Rate,2017,2.71718042575,2.97748249096,2.53251079914
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,414,Stomach cancer,3,Rate,2017,2.85946392032,3.0488839293,2.68728377424
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,418,Liver cancer due to hepatitis B,3,Rate,2017,1.52546820064,1.8393176052300002,1.31541694265
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,419,Liver cancer due to hepatitis C,3,Rate,2017,0.939409991111,1.1287481583999999,0.779987369347
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,420,Liver cancer due to alcohol use,3,Rate,2017,0.85771879898,1.00481924709,0.731474752162
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,421,Liver cancer due to other causes,3,Rate,2017,0.363551725037,0.418908866298,0.31207888675
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,300,HIV/AIDS resulting in other diseases,3,Rate,2017,117.93636715299999,149.991245977,90.5576690531
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,302,Diarrheal diseases,3,Rate,2017,135152.686152,147398.336208,124046.844515
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,319,Typhoid fever,3,Rate,2017,146.250206345,174.628069422,121.91259167
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,320,Paratyphoid fever,3,Rate,2017,22.3525837219,29.2080252933,16.6164205585
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,321,Other intestinal infectious diseases,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,322,Lower respiratory infections,3,Rate,2017,6964.18397261,7576.33945641,6372.42367056
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,328,Upper respiratory infections,3,Rate,2017,209980.48215399997,237891.579518,183244.780027
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,329,Otitis media,3,Rate,2017,6008.76275807,7684.74287887,4726.30483414
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,333,Pneumococcal meningitis,3,Rate,2017,22.777485905,29.380071509900002,17.5233026827
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,334,H influenzae type B meningitis,3,Rate,2017,15.463515717300002,20.8446761329,11.271315958
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,335,Meningococcal meningitis,3,Rate,2017,21.9888551899,28.914556076100002,16.573090462699998
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,474,Bladder cancer,3,Rate,2017,1.39336343063,1.5204272997400001,1.26624581433
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,477,Brain and nervous system cancer,3,Rate,2017,1.6226898787300001,1.8788526950700002,1.2779624761
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,480,Thyroid cancer,3,Rate,2017,0.694538879667,0.79622211094,0.612690045173
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,483,Mesothelioma,3,Rate,2017,0.11511639631,0.132159381542,0.09709456753660001
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,484,Hodgkin lymphoma,3,Rate,2017,0.8139521684680001,1.02869780334,0.613821440987
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,485,Non-Hodgkin lymphoma,3,Rate,2017,2.756574288,3.06452793841,2.45367775075
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,367,Maternal hemorrhage,3,Rate,2017,158.850362408,197.53720034499997,125.482327231
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,368,Maternal sepsis and other maternal infections,3,Rate,2017,319.922593516,384.890444922,262.971188972
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,369,Maternal hypertensive disorders,3,Rate,2017,594.64403786,692.073235887,503.441052572
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,370,Maternal obstructed labor and uterine rupture,3,Rate,2017,160.341159827,213.689890606,120.322201844
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,374,Ectopic pregnancy,3,Rate,2017,1572.64289759,1945.45351484,1254.78583146
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,486,Multiple myeloma,3,Rate,2017,0.636800694621,0.7063147542520001,0.551052804126
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,489,Other malignant neoplasms,3,Rate,2017,5.07436683088,5.6911549281300005,4.45296227009
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,492,Rheumatic heart disease,3,Rate,2017,38.0534967297,39.3196327738,36.8473301515
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,493,Ischemic heart disease,3,Rate,2017,42.578433562899995,48.335486270299995,37.267667110800005
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,495,Ischemic stroke,3,Rate,2017,28.4111379287,32.4022400529,25.1628812871
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,496,Intracerebral hemorrhage,3,Rate,2017,16.0920575583,17.7447787244,14.624619237300001
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,497,Subarachnoid hemorrhage,3,Rate,2017,7.58551519676,8.58948150348,6.706844476470001
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,498,Hypertensive heart disease,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,500,Atrial fibrillation and flutter,3,Rate,2017,11.1230264135,12.88273303,9.38302385714
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,502,Peripheral artery disease,3,Rate,2017,62.8586550256,72.5517497625,54.1554285193
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,503,Endocarditis,3,Rate,2017,16.4330539147,18.2717258672,14.5927330432
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,507,Other cardiovascular and circulatory diseases,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,509,Chronic obstructive pulmonary disease,3,Rate,2017,102.08717035200002,112.927308701,91.70491730750001
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,511,Silicosis,3,Rate,2017,0.051094171370700006,0.065246134024,0.0397793808767
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,512,Asbestosis,3,Rate,2017,0.0896365843353,0.114005073126,0.07024650183270001
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,513,Coal workers pneumoconiosis,3,Rate,2017,0.0130002683683,0.016718897458,0.0096937269771
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,643,Congenital heart anomalies,3,Rate,2017,87.5016007985,98.4485271744,76.9739792907
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,970,Other non-rheumatic valve diseases,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,971,Cirrhosis due to NASH,3,Rate,2017,3.72939317244,4.19616392205,3.3138801496399997
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,559,Schizophrenia,3,Rate,2017,10.826945868800001,12.429128085099999,9.50529677123
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,560,Alcohol use disorders,3,Rate,2017,560.1344270310001,641.689684065,486.945926744
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,562,Opioid use disorders,3,Rate,2017,41.3067705625,49.75980133469999,33.9599384014
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,563,Cocaine use disorders,3,Rate,2017,0.823792564743,0.991012870167,0.677319036784
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,564,Amphetamine use disorders,3,Rate,2017,4.90425944721,6.54379913373,3.63443974528
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,565,Cannabis use disorders,3,Rate,2017,25.458337220500002,31.798423524500002,21.0520062731
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,566,Other drug use disorders,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,568,Major depressive disorder,3,Rate,2017,2949.63624729,3285.25538532,2665.34034801
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,569,Dysthymia,3,Rate,2017,151.60904793699999,173.816169498,131.106567883
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,570,Bipolar disorder,3,Rate,2017,67.8545542476,80.6289536676,56.8703550065
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,571,Anxiety disorders,3,Rate,2017,523.093384776,561.222962706,485.86980066
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,573,Anorexia nervosa,3,Rate,2017,12.5853623676,16.5052685316,9.34183732135
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,574,Bulimia nervosa,3,Rate,2017,104.916702005,150.529810293,70.7992829083
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,575,Autism spectrum disorders,3,Rate,2017,18.528323580000002,20.4563392125,16.6063131266
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,578,Attention-deficit/hyperactivity disorder,3,Rate,2017,96.5831804017,116.90620041899999,78.2242896475
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,579,Conduct disorder,3,Rate,2017,367.181105822,446.942611648,293.436609262
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,582,Idiopathic developmental intellectual disability,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,585,Other mental disorders,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,588,Acute glomerulonephritis,3,Rate,2017,11.819059375,13.826002267799998,10.1026290295
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,379,Other maternal disorders,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,381,Neonatal preterm birth,3,Rate,2017,453.62912674,467.915942379,445.88504597100007
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,382,Neonatal encephalopathy due to birth asphyxia and trauma,3,Rate,2017,113.604696307,167.875830428,75.1676118772
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,383,Neonatal sepsis and other neonatal infections,3,Rate,2017,42.2182777243,70.0629636341,26.6853991344
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,384,Hemolytic disease and other neonatal jaundice,3,Rate,2017,22.3840258261,43.0204390158,9.6048951622
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,385,Other neonatal disorders,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,387,Protein-energy malnutrition,3,Rate,2017,1184.97691802,1232.5150246,1142.12055782
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,388,Iodine deficiency,3,Rate,2017,98.1527760942,110.894701211,86.6041581114
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,389,Vitamin A deficiency,3,Rate,2017,22976.2534361,25080.0843264,20813.842629900002
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,390,Dietary iron deficiency,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,391,Other nutritional deficiencies,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,394,Syphilis,3,Rate,2017,372.564611548,435.23352437700004,313.105166599
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,395,Chlamydial infection,3,Rate,2017,3800.7446421199998,4633.74094772,3143.5520410999998
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,396,Gonococcal infection,3,Rate,2017,2586.3970902600004,3357.58359612,1963.33170244
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,397,Trichomoniasis,3,Rate,2017,4373.07217232,5201.47737456,3684.6505400100004
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,398,Genital herpes,3,Rate,2017,1706.81992515,1934.845633,1507.03154279
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,399,Other sexually transmitted infections,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,401,Acute hepatitis A,3,Rate,2017,3835.53532942,4068.95357317,3602.2201986
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,402,Acute hepatitis B,3,Rate,2017,3016.36378989,3456.90080612,2638.43408286
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,403,Acute hepatitis C,3,Rate,2017,124.111251789,139.604226291,110.388792322
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,557,Other neurological disorders,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,423,Larynx cancer,3,Rate,2017,0.648596851403,0.702083221107,0.602961891791
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,426,"Tracheal, bronchus, and lung cancer",3,Rate,2017,3.5694150318299998,3.8425464035799997,3.3223633440299998
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,429,Breast cancer,3,Rate,2017,8.80624727204,10.2998444496,7.59756628251
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,432,Cervical cancer,3,Rate,2017,10.485516370000001,11.7324580178,8.97341779372
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,435,Uterine cancer,3,Rate,2017,0.848472192332,0.9403170974230001,0.757657613855
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,438,Prostate cancer,3,Rate,2017,5.89227911531,6.969785020780001,4.1822790193
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,441,Colon and rectum cancer,3,Rate,2017,4.04608094224,4.39114146996,3.7619388024699996
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,444,Lip and oral cavity cancer,3,Rate,2017,1.2105999653200001,1.29615777314,1.1224221485900001
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,447,Nasopharynx cancer,3,Rate,2017,0.508127538146,0.581460012128,0.44702764227299996
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,450,Other pharynx cancer,3,Rate,2017,0.302385779025,0.336217999817,0.255139827559
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,453,Gallbladder and biliary tract cancer,3,Rate,2017,0.481803549156,0.612792690192,0.420541893441
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,456,Pancreatic cancer,3,Rate,2017,1.5324722376499997,1.6640860561,1.41411838842
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,459,Malignant skin melanoma,3,Rate,2017,0.430552719135,0.547123627184,0.335921577676
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,465,Ovarian cancer,3,Rate,2017,1.54621914642,1.72731943309,1.36775686616
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,468,Testicular cancer,3,Rate,2017,0.0780042304716,0.090398488224,0.0699123711474
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,471,Kidney cancer,3,Rate,2017,1.9485302195999998,2.17512851301,1.70488962132
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,595,Urinary tract infections,3,Rate,2017,2045.09990007,2296.4223143,1813.38959595
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,596,Urolithiasis,3,Rate,2017,584.40817355,667.785759847,514.37959273
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,597,Benign prostatic hyperplasia,3,Rate,2017,89.1569933696,103.64934217999999,76.9434307503
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,598,Male infertility,3,Rate,2017,0.0,0.0,0.0
+6,Incidence,166,Sub-Saharan Africa,3,Both,22,All Ages,602,Other urinary diseases,3,Rate,2017,0.0,0.0,0.0
