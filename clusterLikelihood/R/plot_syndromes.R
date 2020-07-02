@@ -16,7 +16,7 @@ plot_syndromes <- function(syndromes, priors=NULL, ns=1000){
     
     to_plot <- syndromes[[i]] %>%
                mutate(typical=mode>denom) %>%
-               tidyr::separate_rows('sample') %>%
+               tidyr::unnest('sample') %>%
                mutate(sample=as.numeric(sample)) %>%
                filter(!is.na(sample)) 
 
