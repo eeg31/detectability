@@ -1,10 +1,11 @@
 Package: clusterLikelihood
 Type: Package
-Title: What the package does (short line)
-Version: 1.0
-Date: 2020-01-28
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Title: estimating and visualising syndromic likelihoods of linelists
+Version: 0.2
+Date: 2020-07-02
+Author: Emma Glennon
+Imports: dplyr, extraDistr, ggplot2, purrr, see, tidyr, tsne
+Maintainer: eeg31@cam.ac.uk
+Description: estimating and visualising syndromic likelihoods of linelists (in development)
+License: GNU-GPL3
 LazyData: true
