@@ -93,6 +93,10 @@ get_context <- function(mode_matrix=default_mode,
   syndromes <- inner_syndrome(x_name='all', incidence=priors, 
                               mode_matrix=mode_matrix, var_matrix=var_matrix, ...)
 
+  theta <- get_thetas(syndrome_list = syndromes,
+                      prob=priors, 
+                      ...)
+  
   return(list(denoms = denoms,
               priors = priors,
               syndromes = syndromes,
